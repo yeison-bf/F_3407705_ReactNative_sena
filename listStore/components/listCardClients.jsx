@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 export default function CardListClients({ nombre, edad, direccion }) {
     return (
         <View style={styles.cardCliet}>
-            <Text style={styles.textCardClints}>Nombre : <Text style={styles.TextInter}>{nombre.toUpperCase()}</Text></Text>
+            <Text style={styles.textCardClints}>Nombre : <Text style={styles.TextInter}>{nombre}</Text></Text>
             <Text style={styles.textCardClints}>Edad:  <Text style={styles.TextInter}>{edad} años</Text></Text>
             <Text style={styles.textCardClints}>Dirección:  <Text style={styles.TextInter}>{direccion}</Text></Text>
         </View>
