@@ -1,7 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import CardListClients from './components/listCardClients';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
 
@@ -15,25 +16,42 @@ export default function App() {
   const [locationCeClients, setLocationClients] = useState("")
 
 
+
   // Funcion para guardar :
-  const saveDataClients = () => {
-    setListClients([
+  const saveDataClients =  async() => {
+
+    let newData = [
       ...listClients
       ,
       {
-        id: 1,
+        id: Date.now(),
         nombre: nameCeClients,
         edad: ageCeClients,
         direccion: locationCeClients
       }
-    ])
+    ]
+
+    await AsyncStorage.setItem("@clientsData",  JSON.stringify(newData) )
+
+    setListClients(newData)
     // setVisibleModal(false)
   }
+  
   // Listado de clientes
-  const [listClients, setListClients] = useState([
-    
-  ])
+  const [listClients, setListClients] = useState([])
 
+
+    
+  useEffect(()=>{
+    obtenerData()
+  },[])
+
+  
+  const obtenerData = async () =>{
+    let dataStorage = await AsyncStorage.getItem("@clientsData" ) || []
+    console.log(JSON.parse(dataStorage))
+    setListClients(JSON.parse(dataStorage))
+  }
 
 
   return (
