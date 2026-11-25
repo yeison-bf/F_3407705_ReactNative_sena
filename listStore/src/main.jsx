@@ -2,7 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CardListClients from '../components/listCardClients';
+import CardListClients from './Countries/CountriesModule';
+import { Link } from 'expo-router';
 
 export default function Main() {
 
@@ -15,10 +16,13 @@ export default function Main() {
   const [ageCeClients, setAgeClients] = useState("")
   const [locationCeClients, setLocationClients] = useState("")
 
+  // Listado de clientes
+  const [listClients, setListClients] = useState([])
+
 
 
   // Funcion para guardar :
-  const saveDataClients =  async() => {
+  const saveDataClients = async () => {
 
     let newData = [
       ...listClients
@@ -31,24 +35,20 @@ export default function Main() {
       }
     ]
 
-    await AsyncStorage.setItem("@clientsData",  JSON.stringify(newData) )
+    await AsyncStorage.setItem("@clientsData", JSON.stringify(newData))
 
     setListClients(newData)
     // setVisibleModal(false)
   }
-  
-  // Listado de clientes
-  const [listClients, setListClients] = useState([])
 
 
-    
-  useEffect(()=>{
+  useEffect(() => {
     obtenerData()
-  },[])
+  }, [])
 
-  
-  const obtenerData = async () =>{
-    let dataStorage = await AsyncStorage.getItem("@clientsData" ) || []
+
+  const obtenerData = async () => {
+    let dataStorage = await AsyncStorage.getItem("@clientsData")
     console.log(JSON.parse(dataStorage))
     setListClients(JSON.parse(dataStorage))
   }
@@ -60,6 +60,7 @@ export default function Main() {
         <Text style={styles.titleListClient}>LISTADO DE CLIENTES</Text>
         <StatusBar style="auto" />
       </View>
+
       <View style={styles.containerList}>
         <FlatList
           data={listClients}
@@ -68,7 +69,7 @@ export default function Main() {
             <Text>Pailas, no tienes datos</Text>
           )}
           renderItem={({ item }) => (
-            <CardListClients nombre={item.nombre} edad={item.edad} direccion={item.direccion} />
+            <CardListClients idUser={item.id} nombre={item.nombre} edad={item.edad} direccion={item.direccion} />
           )}
         >
         </FlatList>
